@@ -15,22 +15,39 @@ import java.util.List;
 
 public class ColorCorrectionAddon extends LabyModAddon{
 
+    /**
+     * Mod is enabled
+     */
     private boolean enabled = true;
 
+    /**
+     * Color of color correction
+     */
     private Color color = new Color(255, 255, 255, 0);
 
+    /**
+     * Alpha of color
+     */
     private int alpha = 25;
 
 
+    /**
+     * Enable the addon
+     */
     @Override
     public void onEnable() {
-        System.out.println("-----------------------------------------------------");
         this.getApi().registerForgeListener(this);
     }
 
+    /**
+     * Disable the addon
+     */
     @Override
     public void onDisable() {}
 
+    /**
+     * load config
+     */
     @Override
     public void loadConfig() {
         this.enabled = !this.getConfig().has("enabled") || this.getConfig().get("enabled").getAsBoolean();
@@ -42,6 +59,10 @@ public class ColorCorrectionAddon extends LabyModAddon{
         this.color = new Color(red, green, blue, 255);
     }
 
+    /**
+     * add settings
+     * @param list list of new settings
+     */
     @Override
     protected void fillSettings(final List<SettingsElement> list) {
         final BooleanElement enabled = new BooleanElement("Enabled", new ControlElement.IconData(Material.EMERALD), new Consumer<Boolean>() {
@@ -109,6 +130,10 @@ public class ColorCorrectionAddon extends LabyModAddon{
         list.add(bulkElement);
     }
 
+    /**
+     * Render color correction
+     * @param event event to overlay
+     */
     @SubscribeEvent
     public void render(final RenderGameOverlayEvent event) {
         if (!this.enabled) {
@@ -117,10 +142,16 @@ public class ColorCorrectionAddon extends LabyModAddon{
         Gui.drawRect(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, this.getColor());
     }
 
+    /**
+     * @return color with specific alpha value
+     */
     private int getColor() {
         return new Color(this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.getAlpha()).getRGB();
     }
 
+    /**
+     * @return alpha as 255 RGB value
+     */
     private int getAlpha() {
         return (int) (((float) (this.alpha) / 100) * 255);
     }
